@@ -6,8 +6,8 @@ type Receipt = {
   id: string;
   created_at: string | null;
   file_path: string | null;   // var bilden ligger i bucketen
-  raw_text?: string | null;   // OCR-text från kvittot
-  ocr_text?: string | null;   // ev. annan kolumn
+  raw_text?: string | null;   // OCR-text från kvittot (sparas men visas inte)
+  ocr_text?: string | null;   // ev. annan kolumn (sparas men visas inte)
 };
 
 type Props = {
@@ -55,7 +55,6 @@ export default function ReceiptsList({ receipts }: Props) {
       <div className="space-y-4">
         {receipts.map((receipt) => {
           const imageUrl = buildImageUrl(receipt.file_path);
-          const ocrText = receipt.raw_text ?? receipt.ocr_text ?? "";
           const created = formatDate(receipt.created_at);
 
           return (
@@ -67,7 +66,7 @@ export default function ReceiptsList({ receipts }: Props) {
                 <div className="flex items-center gap-2">
                   <p className="text-sm text-gray-500">{created}</p>
 
-                  {/* Grön bock när kvittot är sparat */}
+                  {/* Grön bock när kvittot är sparat och skickat */}
                   <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full border border-green-200">
                     <svg
                       className="w-3 h-3"
@@ -112,23 +111,6 @@ export default function ReceiptsList({ receipts }: Props) {
                   </form>
                 </div>
               </div>
-
-              {/* Testfunktion: OCR */}
-              {ocrText && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-                    <p className="text-xs font-semibold text-blue-900 mb-1">
-                      Testfunktion: automatisk avläsning (OCR)
-                    </p>
-                    <p className="text-xs text-blue-700 mb-2">
-                      Texten nedan är automatiskt avläst och kan innehålla fel.
-                    </p>
-                    <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">
-                      {ocrText}
-                    </p>
-                  </div>
-                </div>
-              )}
             </article>
           );
         })}
