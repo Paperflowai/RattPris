@@ -131,11 +131,7 @@ export default function UploadForm({ userId }: { userId: string }) {
           disabled={isUploading}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
-          {isUploading
-            ? ocrProgress > 0
-              ? `Läser kvitto... ${ocrProgress}%`
-              : "Skickar och sparar..."
-            : "Skicka och spara kvitto"}
+          {isUploading ? "Skickar och sparar..." : "Skicka och spara kvitto"}
         </button>
       </form>
 

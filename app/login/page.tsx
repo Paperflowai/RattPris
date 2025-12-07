@@ -23,7 +23,7 @@ export default function LoginPage(props: any) {
       </div>
 
       {/* Inloggningskort */}
-      <div className="relative z-10 w-full max-w-md px  -4">
+      <div className="relative z-10 w-full max-w-md px-4">
         <div className="bg-white/95 rounded-2xl shadow-xl p-8">
           <h1 className="text-2xl font-bold mb-2 text-gray-900">
             Logga in på RÄTTPRIS
