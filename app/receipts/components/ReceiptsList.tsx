@@ -63,8 +63,26 @@ export default function ReceiptsList({ receipts }: Props) {
               key={receipt.id}
               className="border border-gray-200 rounded-lg p-4"
             >
-              <div className="flex items-center justify-between mb-2 gap-4">
-                <p className="text-sm text-gray-500">{created}</p>
+              <div className="flex items-center justify-between mb-3 gap-4">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-gray-500">{created}</p>
+
+                  {/* Grön bock när kvittot är sparat */}
+                  <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full border border-green-200">
+                    <svg
+                      className="w-3 h-3"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Kvitto sparat och skickat
+                  </span>
+                </div>
 
                 <div className="flex items-center gap-3">
                   {imageUrl ? (
@@ -95,14 +113,20 @@ export default function ReceiptsList({ receipts }: Props) {
                 </div>
               </div>
 
+              {/* Testfunktion: OCR */}
               {ocrText && (
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 mb-1">
-                    OCR-text:
-                  </p>
-                  <p className="text-sm whitespace-pre-wrap break-words">
-                    {ocrText}
-                  </p>
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+                    <p className="text-xs font-semibold text-blue-900 mb-1">
+                      Testfunktion: automatisk avläsning (OCR)
+                    </p>
+                    <p className="text-xs text-blue-700 mb-2">
+                      Texten nedan är automatiskt avläst och kan innehålla fel.
+                    </p>
+                    <p className="text-sm text-gray-800 whitespace-pre-wrap break-words">
+                      {ocrText}
+                    </p>
+                  </div>
                 </div>
               )}
             </article>
