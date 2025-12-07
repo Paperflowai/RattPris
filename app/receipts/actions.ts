@@ -81,3 +81,55 @@ export async function uploadReceipt(formData: FormData) {
     return { success: false, error: "Ett oväntat fel uppstod" };
   }
 }
+
+export async function deleteReceipt(formData: FormData) {
+  const receiptId = formData.get("receiptId") as string | null;
+  if (!receiptId) return;
+
+  const supabase = await createClient();
+
+  // Kolla vem som är inloggad
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    console.error("Ingen användare inloggad – kan inte radera kvitto.");
+    return;
+  }
+
+  // 1. Hämta kvittot för att få file_path
+  const { data: receipt, error: fetchError } = await supabase
+    .from("receipts")
+    .select("file_path")
+    .eq("id", receiptId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (fetchError) {
+    console.error("Kunde inte hämta kvitto för radering:", fetchError);
+  } else if (receipt?.file_path) {
+    // 2. Ta bort filen från Supabase Storage
+    const { error: storageError } = await supabase.storage
+      .from("receipts")
+      .remove([receipt.file_path]);
+
+    if (storageError) {
+      console.error("Kunde inte ta bort filen från storage:", storageError);
+    }
+  }
+
+  // 3. Ta bort raden i databasen
+  const { error: deleteError } = await supabase
+    .from("receipts")
+    .delete()
+    .eq("id", receiptId)
+    .eq("user_id", user.id);
+
+  if (deleteError) {
+    console.error("Kunde inte ta bort kvitto i databasen:", deleteError);
+  }
+
+  // 4. Ladda om /receipts så listan uppdateras
+  revalidatePath("/receipts");
+}
